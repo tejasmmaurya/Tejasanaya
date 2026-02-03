@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine 💘</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Loading Screen */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #ff2e63, #ff758c);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  overflow: hidden;
+}
+#loading h1 {
+  color: #fff;
+  font-size: clamp(2rem, 10vw, 5rem);
+  display: flex;
+  gap: 0.3rem;
+}
+#loading h1 span {
+  display: inline-block;
+  animation: bounce 1s infinite alternate;
+  transform-origin: center;
+  position: relative;
+}
+#loading h1 span:nth-child(1){ animation-delay: 0s; }
+#loading h1 span:nth-child(2){ animation-delay: 0.1s; }
+#loading h1 span:nth-child(3){ animation-delay: 0.2s; }
+#loading h1 span:nth-child(4){ animation-delay: 0.3s; }
+#loading h1 span:nth-child(5){ animation-delay: 0.4s; }
+#loading h1 span:nth-child(6){ animation-delay: 0.5s; }
+
+@keyframes bounce {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  50% { transform: translateY(-25px) rotate(-10deg) scale(1.2); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+/* Valentine Card */
+.card {
+  display: none;
+  background: #fff;
+  width: 90%;
+  max-width: 400px;
+  padding: clamp(2rem,5vw,3rem);
+  border-radius: 2rem;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  z-index: 10;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.card.show { opacity: 1; }
+
+h1 { color: #ff2e63; font-size: clamp(1.8rem,5vw,2.5rem); margin-bottom: 1rem; }
+p { font-size: clamp(1rem,3vw,1.2rem); margin-bottom: 2rem; color:#333; }
+
+.btns {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem,5vw,2rem);
+  flex-wrap: wrap;
+  min-height: 50px;
+  position: relative;
+}
+
+button {
+  padding: clamp(0.6rem,2vw,1rem) clamp(1.5rem,4vw,2rem);
+  border: none;
+  border-radius: 999px;
+  font-size: clamp(0.9rem,2vw,1.2rem);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#yes { background: #ff2e63; color: white; }
+#yes:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+#no {
+  background: #ddd;
+  color: #333;
+  position: fixed;
+  white-space: nowrap;
+  z-index: 100;
+  transition: transform 0.2s ease;
+}
+
+/* Updated Celebration Screen */
+.celebrate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #ff758c 0%, #ff2e63 100%);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.message-box {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  padding: 3rem 2rem;
+  border-radius: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+#loveMessage {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(3rem, 10vw, 4.5rem);
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#replayBtn {
+  margin-top: 2rem;
+  padding: 0.8rem 2.5rem;
+  background: #fff;
+  color: #ff2e63;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+canvas#confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.signature {
+  margin-top: 2rem;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: #ff2e63;
+  font-weight: bold;
+}
+
+.celebrate .signature {
+  color: rgba(255,255,255,0.8);
+}
+
+/* Better Heart Animation */
+.heart-floating {
+  position: absolute;
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  animation: floatUp 5s ease-in infinite;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(-20vh) scale(1.5) rotate(360deg); opacity: 0; }
+}
+
+#yesMessagesContainer p {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <h1><span>S</span><span>A</span><span>N</span><span>A</span><span>Y</span><span>A</span></h1>
+  <p style="font-size:1.5rem; margin-top:20px; color: white;">💖 Loading Your Surprise 💖</p>
+</div>
+
+<div class="card" id="card">
+  <h1 id="title">Hey 💕</h1>
+  <p>Will you be my Valentine?</p>
+  <div class="btns">
+    <button id="yes">Yes 💖</button>
+    <button id="no">No 😶</button>
+  </div>
+  <div class="signature">Made with ❤️ Tejas Maurya</div>
+</div>
+
+<div class="celebrate" id="celebrate">
+  <canvas id="confetti"></canvas>
+  <div class="message-box">
+    <h2 id="loveMessage"></h2>
+    <div id="yesMessagesContainer"></div>
+    <button id="replayBtn">✨ Replay Magic</button>
+    <div class="signature">Made with ❤️ Tejas Maurya</div>
+  </div>
+</div>
+
+<script>
+// Loading simulation
+const loading = document.getElementById("loading");
+const card = document.getElementById("card");
+setTimeout(()=>{
+  loading.style.opacity = 0;
+  setTimeout(()=>{ loading.style.display="none"; card.style.display="block"; card.classList.add("show"); },600);
+}, 3500);
+
+// Valentine Card logic
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const celebrate = document.getElementById("celebrate");
+const title = document.getElementById("title");
+
+const messages = [
+  "Galat button daba diya, sanaya! 😅", "Maan jao na 🥺", "Ab toh maan jao sanaya 💔",
+  "Please? 😢", "Itna bhaav kyun, sanaya? 😅", "Dil tod diya... 🥹",
+  "Pyaar dikhao na sanaya ❤️", "Ek YES bol do 🥰", "Aakhri baar... 😔",
+  "Sach mein No, sanaya? 😶", "Itna bhi kya gussa 😤", "Man jao na please 😞",
+  "Kitna ignore karogi sanaya 🥺", "Bas ho gaya drama 😅", "Okay okay last try 😬",
+  "Seriously? 😐", "Bas ab haan bol do sanaya 😏", "Ek chance aur... 💔",
+  "Tumhare smile miss kar raha hoon 😘", "Agar haan bologi toh sab bhool jaunga 😉",
+  "Mujhe tumhari zarurat hai 🥰", "Bas ek haan ka intezaar 😇",
+  "Tum mere liye perfect ho sanaya 😏", "Chalo ek baar phir try karte hain 😅",
+  "Haan bol do aur khush ho jao 💖", "Tumhare bina life boring hai 😢",
+  "Bas ek pyara sa YES 😍", "Tumhare saath ho toh sab possible 😎",
+  "Chalo pyar dikhate hain 😘", "Haan bolo aur surprise pao 😏",
+  "Ek chhoti si smile de do 🥹", "Tumhare liye sab kuch kar sakta hoon 💘",
+  "Ab seriously, haan bolo sanaya 😏", "Mera dil tumhare naam 😍",
+  "Haan na? Abhi? 😋", "Tum meri duniya ho 🥰", "Ek baar haan bolo aur dekho magic ✨",
+];
+
+let noCount = 0;
+function moveNo() {
+  title.textContent = messages[noCount % messages.length];
+  noCount++;
+  const padding = 20;
+  const bWidth = noBtn.offsetWidth;
+  const bHeight = noBtn.offsetHeight;
+  const vWidth = window.innerWidth;
+  const vHeight = window.innerHeight;
+  const randomX = Math.random()*(vWidth-bWidth-2*padding)+padding;
+  const randomY = Math.random()*(vHeight-bHeight-2*padding)+padding;
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+}
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("touchstart", e=>{ e.preventDefault(); moveNo(); });
+
+function startConfetti(){
+  const canvas = document.getElementById("confetti");
+  const ctx = canvas.getContext("2d");
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  const pieces=Array.from({length:100},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*4+2,
+    color:`hsl(${Math.random()*360},100%,70%)`,
+    v:Math.random()*3+2,
+    tilt:Math.random()*10
+  }));
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.beginPath(); ctx.fillStyle=p.color;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+      p.y+=p.v; p.x += Math.sin(p.tilt);
+      if(p.y>canvas.height) p.y=-10;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function createHearts() {
+  for(let i=0;i<15;i++){
+    const heart = document.createElement('div');
+    heart.className = 'heart-floating';
+    heart.textContent = ['❤️','💖','💕','💗'][Math.floor(Math.random()*4)];
+    heart.style.left = Math.random()*95+'vw';
+    heart.style.animationDuration = (3+Math.random()*4)+'s';
+    heart.style.animationDelay = (Math.random()*2)+'s';
+    document.getElementById('celebrate').appendChild(heart);
+    setTimeout(()=> heart.remove(), 7000);
+  }
+}
+
+const loveMessage = document.getElementById("loveMessage");
+const messageText = "I ❤️ You Sanaya!";
+let idx = 0;
+function typeMessage() {
+  loveMessage.textContent = messageText.slice(0, idx);
+  idx++;
+  if(idx <= messageText.length) setTimeout(typeMessage, 120);
+}
+
+const yesMessages = [
+  "Yay!! Sanaya said YES 🥰", "I knew you couldn't resist 😏",
+  "You just made my day 💖", "Sanaya, tum meri duniya ho 🥰",
+  "Ab hum dono ki adventures shuru 💫", "Tumhare bina life boring hai 😢",
+  "Chalo ek chhoti si surprise plan karte hain ✨", "Tumhari smile miss kar raha hoon 😘",
+  "Bas ab hum dono ki duniya ❤️", "Love you sanaya 💘"
+];
+
+function showYesMessages() {
+  const container = document.getElementById("yesMessagesContainer");
+  container.innerHTML = '';
+  let idxMsg = 0;
+  function showNext() {
+    if(idxMsg < yesMessages.length){
+      const msg = document.createElement('p');
+      msg.textContent = yesMessages[idxMsg];
+      msg.style.cssText = "opacity:0; transform:translateY(10px); transition:0.6s ease;";
+      container.appendChild(msg);
+      setTimeout(()=>{ msg.style.opacity = 1; msg.style.transform = 'translateY(0)'; }, 50);
+      idxMsg++;
+      setTimeout(showNext, 2200);
+    }
+  }
+  showNext();
+}
+
+document.getElementById("replayBtn").addEventListener("click", ()=>{
+  createHearts();
+  startConfetti();
+});
+
+yesBtn.addEventListener("click", ()=>{
+  celebrate.style.display = "flex";
+  setTimeout(() => celebrate.style.opacity = "1", 10);
+  typeMessage();
+  createHearts();
+  startConfetti();
+  showYesMessages();
+});
+</script>
+</body>
+</html>
