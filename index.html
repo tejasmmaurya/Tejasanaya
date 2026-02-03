@@ -221,13 +221,25 @@ canvas#confetti {
 </div>
 
 <script>
+// ============================================
+// TIMING CONFIGURATION
+// ============================================
+// Adjust these values to control animation speeds and delays
+const TIMING = {
+  LOADING_DISPLAY_TIME: 3500,    // Time (ms) to display loading screen before showing card (default: 3500ms = 3.5 seconds)
+  LOADING_FADE_OUT: 600,         // Time (ms) for loading screen fade out transition (default: 600ms)
+  TYPING_SPEED: 120,             // Time (ms) between each character when typing message (default: 120ms)
+  YES_MESSAGE_INTERVAL: 2200,    // Time (ms) between showing each "yes" message (default: 2200ms)
+  HEART_LIFETIME: 7000           // Time (ms) floating hearts stay on screen (default: 7000ms)
+};
+
 // Loading simulation
 const loading = document.getElementById("loading");
 const card = document.getElementById("card");
 setTimeout(()=>{
   loading.style.opacity = 0;
-  setTimeout(()=>{ loading.style.display="none"; card.style.display="block"; card.classList.add("show"); },600);
-}, 3500);
+  setTimeout(()=>{ loading.style.display="none"; card.style.display="block"; card.classList.add("show"); }, TIMING.LOADING_FADE_OUT);
+}, TIMING.LOADING_DISPLAY_TIME);
 
 // Valentine Card logic
 const noBtn = document.getElementById("no");
@@ -305,7 +317,7 @@ function createHearts() {
     heart.style.animationDuration = (3+Math.random()*4)+'s';
     heart.style.animationDelay = (Math.random()*2)+'s';
     document.getElementById('celebrate').appendChild(heart);
-    setTimeout(()=> heart.remove(), 7000);
+    setTimeout(()=> heart.remove(), TIMING.HEART_LIFETIME);
   }
 }
 
@@ -315,7 +327,7 @@ let idx = 0;
 function typeMessage() {
   loveMessage.textContent = messageText.slice(0, idx);
   idx++;
-  if(idx <= messageText.length) setTimeout(typeMessage, 120);
+  if(idx <= messageText.length) setTimeout(typeMessage, TIMING.TYPING_SPEED);
 }
 
 const yesMessages = [
@@ -338,7 +350,7 @@ function showYesMessages() {
       container.appendChild(msg);
       setTimeout(()=>{ msg.style.opacity = 1; msg.style.transform = 'translateY(0)'; }, 50);
       idxMsg++;
-      setTimeout(showNext, 2200);
+      setTimeout(showNext, TIMING.YES_MESSAGE_INTERVAL);
     }
   }
   showNext();
