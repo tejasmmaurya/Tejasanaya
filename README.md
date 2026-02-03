@@ -6,8 +6,11 @@ A beautiful Valentine's Day themed interactive webpage.
 
 **Can't see your HTML at the URL?** Follow these exact steps:
 
-### Step 1: Merge This PR (if working in a branch)
-If you're viewing this from a Pull Request, merge it to your default branch.
+### Step 1: Merge This PR to Main Branch (REQUIRED!)
+**IMPORTANT**: GitHub Pages deployment only works from the `main` branch due to environment protection rules.
+
+1. If you're viewing this from a Pull Request, **merge it to the `main` branch**
+2. The workflow will NOT deploy from feature branches like `copilot/publish-html-via-github-pages`
 
 ### Step 2: Enable GitHub Pages (REQUIRED)
 1. Go to **https://github.com/tejasmmaurya/Tejasanaya/settings/pages**
@@ -16,14 +19,16 @@ If you're viewing this from a Pull Request, merge it to your default branch.
 3. Click **Save** (if there's a save button)
 
 ### Step 3: Trigger the Deployment
-Option A - Automatic (after committing this change):
-- The workflow will run automatically when you push this commit
+After merging to `main`, the deployment will happen automatically:
+- The workflow runs automatically when you push to `main` branch
+- Check deployment status at: **https://github.com/tejasmmaurya/Tejasanaya/actions**
+- Look for "Deploy static content to Pages" with a green checkmark ✓
 
-Option B - Manual trigger:
+**Manual Trigger** (only works from `main` branch):
 1. Go to **https://github.com/tejasmmaurya/Tejasanaya/actions**
 2. Click on **"Deploy static content to Pages"** workflow
 3. Click the **"Run workflow"** button (top right)
-4. Select your branch (copilot/publish-html-via-github-pages or main)
+4. Select **`main`** branch (not feature branches)
 5. Click **"Run workflow"**
 
 ### Step 4: Wait and Access
@@ -67,11 +72,19 @@ const TIMING = {
 
 **Still can't see the page?**
 
-1. ✅ **Check Pages is enabled**: Go to Settings → Pages → Source should be "GitHub Actions"
-2. ✅ **Check workflow ran**: Go to Actions tab - you should see a successful green checkmark
-3. ✅ **Check the URL**: Must be exactly `https://tejasmmaurya.github.io/Tejasanaya/` (with capital T and capital S)
-4. ✅ **Wait**: GitHub Pages can take 2-5 minutes on first deployment
-5. ✅ **Clear browser cache**: Try Ctrl+Shift+R (or Cmd+Shift+R on Mac)
+1. ✅ **Check you're on main branch**: Deployment only works from `main` branch, not feature branches
+2. ✅ **Check Pages is enabled**: Go to Settings → Pages → Source should be "GitHub Actions"
+3. ✅ **Check workflow ran**: Go to Actions tab - you should see a successful green checkmark on `main` branch
+4. ✅ **Check the URL**: Must be exactly `https://tejasmmaurya.github.io/Tejasanaya/` (with capital T and capital S)
+5. ✅ **Wait**: GitHub Pages can take 2-5 minutes on first deployment
+6. ✅ **Clear browser cache**: Try Ctrl+Shift+R (or Cmd+Shift+R on Mac)
+
+**Getting "Branch is not allowed to deploy" error?**
+
+This means you're trying to deploy from a feature branch. Solution:
+1. Merge your PR to the `main` branch
+2. The workflow will automatically deploy from `main`
+3. GitHub's environment protection rules only allow deployment from `main` branch
 
 ---
 
